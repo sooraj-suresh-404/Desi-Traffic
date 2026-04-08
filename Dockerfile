@@ -8,7 +8,7 @@ ENV PATH="/home/user/.local/bin:$PATH"
 WORKDIR /app
 
 # Install required packages including server dependencies
-RUN pip install --no-cache-dir gymnasium pydantic openai stable-baselines3 pygame fastapi uvicorn "openenv[server]"
+RUN pip install --no-cache-dir gymnasium pydantic openai stable-baselines3 pygame fastapi uvicorn "openenv[server]==0.1.13"
 
 # Copy all files into the container
 COPY --chown=user:user . .
