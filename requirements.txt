@@ -1,0 +1,4 @@
+pydantic
+gymnasium
+openai
+openenv

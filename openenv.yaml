@@ -1,0 +1,10 @@
+version: "1.0"
+name: "DesiTraffic"
+description: "A Smart City Traffic Controller representing Indian road traffic characteristics, requiring the agent to manage traffic lights."
+tasks:
+  - name: "desi_traffic_easy"
+    description: "Manage a low-density rural intersection with few VVIPs/ambulances."
+  - name: "desi_traffic_medium"
+    description: "Manage a standard city intersection with high two-wheeler density."
+  - name: "desi_traffic_hard"
+    description: "Manage peak rush hour with gridlock risks, stray animals, and multiple ambulances."
