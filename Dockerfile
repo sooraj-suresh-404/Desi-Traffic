@@ -7,12 +7,14 @@ ENV PATH="/home/user/.local/bin:$PATH"
 
 WORKDIR /app
 
-COPY --chown=user:user requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install required packages including server dependencies
+RUN pip install --no-cache-dir gymnasium pydantic openai stable-baselines3 pygame fastapi uvicorn "openenv[server]"
 
+# Copy all files into the container
 COPY --chown=user:user . .
 
-# A dummy web server on port 7860. This keeps the Hugging Face Space "Running" indefinitely,
-# serves the 200 OK health check so you don't get a 504 Gateway Timeout,
-# and allows the OpenEnv hackathon bot to evaluate the container!
-CMD ["python", "-m", "http.server", "7860"]
+# Expose port 7860 for Hugging Face Spaces
+EXPOSE 7860
+
+# Run the OpenEnv server
+CMD ["python", "server.py"]
