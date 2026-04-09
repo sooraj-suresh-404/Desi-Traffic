@@ -149,8 +149,23 @@ class DesiTrafficEnv(gym.Env):
         if self.state_data.ambulance_approaching.west and self.state_data.current_green_phase != PHASE_EW_STR: amb_penalty -= 10.0
         elif self.state_data.ambulance_approaching.west and self.state_data.current_green_phase == PHASE_EW_STR: self.state_data.ambulance_approaching.west = 0
 
-        score = wait_penalty + throughput_bonus + amb_penalty
-        return TrafficReward(total_waiting_time_penalty=wait_penalty, throughput_bonus=throughput_bonus, ambulance_penalty=amb_penalty, overall_score=score)
+        raw_score = wait_penalty + throughput_bonus + amb_penalty
+        
+        # Normalize raw score to strictly (0, 1) for validator compliance.
+        # Expected raw score range: roughly [-100, +20] per step, so we map to (0, 1).
+        epsilon = 1e-6
+        bounded_min, bounded_max = -100.0, 20.0
+        normalized = (raw_score - bounded_min) / (bounded_max - bounded_min)
+        
+        # Clamp to open interval with epsilon margins
+        if normalized <= 0.0:
+            normalized = epsilon
+        elif normalized >= 1.0:
+            normalized = 1.0 - epsilon
+        else:
+            normalized = max(epsilon, min(1.0 - epsilon, normalized))
+        
+        return TrafficReward(total_waiting_time_penalty=wait_penalty, throughput_bonus=throughput_bonus, ambulance_penalty=amb_penalty, overall_score=normalized)
 
     def render(self):
         if self.render_mode == "console":
