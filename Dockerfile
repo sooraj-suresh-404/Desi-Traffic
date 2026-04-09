@@ -17,4 +17,4 @@ COPY --chown=user:user . .
 EXPOSE 7860
 
 # Run the OpenEnv server
-CMD ["python", "server.py"]
+CMD ["python", "-m", "server.app"]

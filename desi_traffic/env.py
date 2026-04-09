@@ -152,8 +152,8 @@ class DesiTrafficEnv(gym.Env):
         raw_score = wait_penalty + throughput_bonus + amb_penalty
         
         # Normalize raw score to strictly (0, 1) for validator compliance.
-        # Expected raw score range: roughly [-100, +20] per step, so we map to (0, 1).
-        epsilon = 1e-6
+        # Keep a visible margin from endpoints to survive score rounding.
+        epsilon = 1e-3
         bounded_min, bounded_max = -100.0, 20.0
         normalized = (raw_score - bounded_min) / (bounded_max - bounded_min)
         

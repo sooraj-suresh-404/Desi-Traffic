@@ -5,6 +5,7 @@ colorFrom: yellow
 colorTo: red
 sdk: docker
 app_file: inference.py
+app_port: 7860
 pinned: false
 tags:
   - openenv
@@ -49,3 +50,30 @@ Typed via Pydantic `TrafficReward`.
 
 ## Baseline Performance Scores
 Baseline scores utilizing `gpt-4o-mini` tend to vary from 0.60 to 0.85 depending on stochastic ambulance appearances.
+
+## Deploy To Hugging Face Spaces (Docker)
+1. Create a new Space on Hugging Face:
+  - SDK: `Docker`
+  - Visibility: as needed (`Public` or `Private`)
+
+2. Push this repository to the Space Git remote:
+  ```bash
+  git init
+  git add .
+  git commit -m "Prepare OpenEnv submission for HF Space"
+  git remote add space https://huggingface.co/spaces/<YOUR_USERNAME>/<YOUR_SPACE_NAME>
+  git push --force space main
+  ```
+
+3. In Space settings, add secrets/variables:
+  - `HF_TOKEN` (required only when running `inference.py` against model APIs)
+  - Optional: `MODEL_NAME`, `API_BASE_URL`
+
+4. Confirm container health:
+  - The app serves on port `7860`
+  - Health endpoint: `/health`
+
+5. Local parity check before pushing:
+  ```bash
+  openenv validate
+  ```

@@ -2,3 +2,5 @@ pydantic
 gymnasium
 openai
 openenv
+fastapi
+uvicorn
